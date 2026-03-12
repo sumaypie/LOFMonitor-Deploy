@@ -7,7 +7,7 @@ import sys
 import time
 import threading
 from config import config
-from data_fetcher import get_all_fund_data
+from data_fetcher import get_all_fund_data, parse_fund_state
 from calculator import calculate_premium_discount, get_status
 from notifier import send_dingtalk_alert, format_alert_message
 from logger_util import log_alert
@@ -143,7 +143,7 @@ class LOFMonitorCLI:
             name = fund['name']
             market_price = fund['market_price']
             nav_price = fund['nav_price']
-            f_state = fund.get('fund_state', '')
+            f_state = ""
             
             # 计算溢价/折价率
             premium_rate, discount_rate = calculate_premium_discount(market_price, nav_price)
@@ -160,7 +160,8 @@ class LOFMonitorCLI:
                 m_price_str = f"{market_price:.4f}" if market_price else "N/A"
                 n_price_str = f"{nav_price:.4f}" if nav_price else "N/A"
                 status_text = "⚠️ 溢价" if status == 'premium_alert' else "⚠️ 折价"
-                
+                f_state = parse_fund_state(code)
+
                 # 构建对齐行
                 row = (
                     align_text(code, w_code) +
