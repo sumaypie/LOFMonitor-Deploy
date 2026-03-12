@@ -117,7 +117,7 @@ def get_all_fund_data(progress_callback=None, data_callback=None):
     nav_df = nav_df[nav_df['基金代码'].astype(str).isin(valid_codes)]
     
     result = []
-    total = len(nav_df)
+    total = len(fund_df)
     for idx, row in fund_df.iterrows():
         code = row['code']
         name = row['name']
